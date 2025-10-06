@@ -10,6 +10,7 @@ from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_google_genai import ChatGoogleGenerativeAI
 from tradingagents.llm_adapters import ChatDashScope, ChatDashScopeOpenAI, ChatGoogleOpenAI
+from tradingagents.llm_adapters.google_openai_adapter import DEFAULT_GOOGLE_CLIENT_OPTIONS
 
 from langgraph.prebuilt import ToolNode
 
@@ -133,7 +134,7 @@ class TradingAgentsGraph:
                 google_api_key=google_api_key,
                 temperature=0.1,
                 max_tokens=2000,
-                client_options=client_options,
+                client_options=DEFAULT_GOOGLE_CLIENT_OPTIONS,
                 transport="rest"
             )
             

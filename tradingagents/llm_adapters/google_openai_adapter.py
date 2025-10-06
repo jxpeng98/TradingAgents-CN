@@ -6,6 +6,7 @@ Google AI OpenAI兼容适配器
 
 import os
 from typing import Any, Dict, List, Optional, Union, Sequence
+from google.api_core.client_options import ClientOptions
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.tools import BaseTool
 from langchain_core.messages import BaseMessage, AIMessage, HumanMessage, SystemMessage
@@ -16,6 +17,11 @@ from ..config.config_manager import token_tracker
 # 导入日志模块
 from tradingagents.utils.logging_manager import get_logger
 logger = get_logger('agents')
+
+
+# 默认的 Google 客户端配置，确保在使用 REST 传输时具备正确的 API 端点
+DEFAULT_GOOGLE_API_ENDPOINT = os.getenv("GOOGLE_API_ENDPOINT", "generativelanguage.googleapis.com")
+DEFAULT_GOOGLE_CLIENT_OPTIONS = ClientOptions(api_endpoint=DEFAULT_GOOGLE_API_ENDPOINT)
 
 
 class ChatGoogleOpenAI(ChatGoogleGenerativeAI):
@@ -31,6 +37,8 @@ class ChatGoogleOpenAI(ChatGoogleGenerativeAI):
         # 设置 Google AI 的默认配置
         kwargs.setdefault("temperature", 0.1)
         kwargs.setdefault("max_tokens", 2000)
+        kwargs.setdefault("transport", "rest")
+        kwargs.setdefault("client_options", DEFAULT_GOOGLE_CLIENT_OPTIONS)
         
         # 检查 API 密钥
         google_api_key = kwargs.get("google_api_key") or os.getenv("GOOGLE_API_KEY")
